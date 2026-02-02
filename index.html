@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Queen, Shagun ❤️</title>
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --primary: #ff4d6d;
+            --soft-pink: #ffe5ec;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
+            font-family: 'Poppins', sans-serif;
+            background: var(--soft-pink);
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        /* --- BACKGROUND FLOATING HEARTS --- */
+        .bg-hearts {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+
+        /* --- SCENE 1: LUXURY ENVELOPE --- */
+        #greeting-scene {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            z-index: 2000; transition: 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .envelope {
+            width: 250px; height: 180px; background: white;
+            position: relative; cursor: pointer; border-radius: 0 0 10px 10px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+        .envelope:hover { transform: scale(1.05); }
+
+        .envelope::before {
+            content: ""; position: absolute; top: -115px; left: 0;
+            border-left: 125px solid transparent; border-right: 125px solid transparent;
+            border-bottom: 115px solid white;
+        }
+
+        .heart-seal {
+            position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+            font-size: 50px; color: var(--primary); animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.25); } }
+
+        /* --- SCENE 2: MAIN PROPOSAL --- */
+        #proposal-scene {
+            display: none; padding: 30px 15px; text-align: center;
+            height: 100vh; overflow-y: auto; background: radial-gradient(circle, #fff0f3, #ffccd5);
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9); max-width: 500px; margin: 0 auto;
+            padding: 30px; border-radius: 40px; box-shadow: 0 25px 60px rgba(255, 77, 109, 0.3);
+            border: 4px solid white; position: relative; z-index: 10;
+        }
+
+        .slider-frame {
+            width: 230px; height: 230px; margin: 0 auto 20px;
+            border: 6px solid white; border-radius: 25px; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .slider-images {
+            display: flex; width: 400%; height: 100%;
+            animation: slide 12s infinite linear;
+        }
+        .slider-images img { width: 25%; height: 100%; object-fit: cover; }
+
+        @keyframes slide {
+            0%, 20% { transform: translateX(0); }
+            25%, 45% { transform: translateX(-25%); }
+            50%, 70% { transform: translateX(-50%); }
+            75%, 95% { transform: translateX(-75%); }
+            100% { transform: translateX(0); }
+        }
+
+        .title { font-family: 'Dancing Script', cursive; font-size: 2.8em; color: var(--primary); margin: 15px 0; }
+
+        .message-box {
+            text-align: left; background: #fff9fa; padding: 25px; border-radius: 25px;
+            font-size: 0.95rem; line-height: 1.8; color: #444; min-height: 250px;
+            border-left: 6px solid var(--primary); margin-bottom: 20px;
+        }
+
+        .loyalty-meter {
+            height: 12px; width: 100%; background: #eee; border-radius: 10px; margin-bottom: 25px; overflow: hidden;
+        }
+        .loyalty-fill {
+            height: 100%; width: 0%; background: linear-gradient(to right, #ff4d6d, #ff0055); transition: width 4s ease-in-out;
+        }
+
+        .btn-group { display: flex; justify-content: center; align-items: center; gap: 20px; min-height: 100px; }
+        
+        #yesBtn {
+            background: var(--primary); color: white; border: none; padding: 15px 45px;
+            font-size: 1.2rem; border-radius: 50px; cursor: pointer; font-weight: bold;
+            box-shadow: 0 8px 20px rgba(255, 47, 109, 0.4); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        #noBtn { 
+            background: #888; color: white; border: none; padding: 12px 30px; 
+            border-radius: 50px; cursor: pointer; transition: 0.2s ease;
+        }
+
+        /* --- SUCCESS SCENE --- */
+        #success-page { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            flex-direction: column; justify-content: center; align-items: center;
+            background: #ffccd5; z-index: 3000;
+        }
+        .success-card {
+            background: white; padding: 40px; border-radius: 35px; width: 85%; max-width: 450px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2); border: 5px solid #ff4d6d; text-align: center;
+        }
+
+        .emoji-rain { position: fixed; pointer-events: none; z-index: 4000; animation: rain 4s linear forwards; }
+        @keyframes rain { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+
+        .forever-tag { margin-top: 30px; font-family: 'Dancing Script', cursive; font-size: 1.8em; color: #888; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-hearts" id="bgHearts"></div>
+
+    <!-- MASHUP SONG -->
+    <audio id="mashupSong" loop preload="auto">
+        <source src="https://following-apricot-h0ulqtg1ha.edgeone.app/akhiyaan-gulaab-x-sanam-re-tranding-mashup-shahid-kapoor-kriti-sanon_GQZnKJQ9.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- SCENE 1: GREETING -->
+    <div id="greeting-scene">
+        <h2 style="color: white; font-family: 'Dancing Script', cursive; font-size: 3em; margin-bottom: 30px;">For My Shagun ❤️</h2>
+        <div class="envelope" onclick="openSurprise()">
+            <div class="heart-seal">❤️</div>
+        </div>
+        <p style="color: white; margin-top: 25px; letter-spacing: 2px;">CLICK TO REVEAL MY HEART</p>
+    </div>
+
+    <!-- SCENE 2: PROPOSAL -->
+    <div id="proposal-scene">
+        <div class="container">
+            <div class="slider-frame">
+                <div class="slider-images">
+                    <img src="https://i.ibb.co/GQn11tTj/image.jpg" alt="1">
+                    <img src="https://i.ibb.co/nsPxy6DD/image.jpg" alt="2">
+                    <img src="https://i.ibb.co/k2gWTdCN/image.jpg" alt="3">
+                    <img src="https://i.ibb.co/s9r7CsQJ/image.jpg" alt="4">
+                </div>
+            </div>
+
+            <div class="title">My Dearest Shagun...</div>
+            
+            <!-- TYPEWRITER MESSAGE BOX -->
+            <div class="message-box" id="typingMessage"></div>
+
+            <p style="font-size: 0.8em; color: #888; text-align: left; margin-left: 10px;">Loyalty Level:</p>
+            <div class="loyalty-meter"><div class="loyalty-fill" id="meter"></div></div>
+
+            <div class="btn-group" id="btnGroup" style="display: none;">
+                <button id="yesBtn" onclick="acceptProposal()">YES! ❤️</button>
+                <button id="noBtn" onclick="shrinkNo()">No 🥺</button>
+            </div>
+
+            <div class="forever-tag">Forever, Ankit</div>
+        </div>
+    </div>
+
+    <!-- SCENE 3: SUCCESS (THE SURPRISE) -->
+    <div id="success-page">
+        <div class="success-card">
+            <h1 class="title" style="font-size: 3.5em;">Thank You, Shagun! 😍</h1>
+            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" width="220" style="border-radius: 20px;">
+            <p style="font-size: 1.4em; color: #444; margin-top: 25px; font-weight: 600;">
+                You just made me the happiest person! ❤️ <br> I promise to prove my loyalty to you every single day.
+            </p>
+            <div style="font-family: 'Dancing Script', cursive; font-size: 2.5em; color: var(--primary); margin-top: 25px;">
+                Yours Forever, Ankit
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messageText = `Dear Shagun, 🌸\n\nI want to start by being completely honest. I am deeply sorry for that day; my friend used my account for a prank, but it hurt me because it made my real feelings look like a joke to you. 😔\n\nI know we haven't known each other for a long time, but still, you have managed to capture a space in my heart that I never knew existed. Trust isn't built in days, but in moments.\n\nI am fully aware that I am not the only one who admires you. There are many who probably put in more 'efforts', but while they offer efforts, I offer you my absolute loyalty. 🛡️\n\nI am here to be your peace, your support, and your constant. Every time I see your pictures, I see a future I want to protect. I just need one chance to prove that I am worthy of your heart. 💖\n\nWill you be my Valentine? 🌹`;
+
+        // 1. OPEN SURPRISE
+        function openSurprise() {
+            const song = document.getElementById('mashupSong');
+            song.play().catch(() => console.log("Song play blocked"));
+
+            document.getElementById('greeting-scene').style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+                document.getElementById('greeting-scene').style.display = 'none';
+                document.getElementById('proposal-scene').style.display = 'block';
+                startTyping();
+                setTimeout(() => { document.getElementById('meter').style.width = '100%'; }, 500);
+            }, 800);
+        }
+
+        // 2. TYPING EFFECT
+        let i = 0;
+        function startTyping() {
+            if (i < messageText.length) {
+                document.getElementById("typingMessage").innerHTML += messageText.charAt(i);
+                i++;
+                setTimeout(startTyping, 40);
+            } else {
+                document.getElementById('btnGroup').style.display = 'flex';
+            }
+        }
+
+        // 3. BUTTONS LOGIC
+        let noClicks = 0;
+        function shrinkNo() {
+            noClicks++;
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+
+            // Resize Yes
+            let yesScale = 1 + (noClicks * 0.5);
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            // Shrink No
+            let noScale = Math.max(0.1, 1 - (noClicks * 0.2));
+            noBtn.style.transform = `scale(${noScale})`;
+            if(noScale < 0.4) noBtn.style.opacity = '0';
+            
+            const phrases = ["Sure?", "Rethink!", "Trust me?", "Really?", "🥺"];
+            noBtn.innerText = phrases[noClicks % phrases.length];
+        }
+
+        // 4. THE GRAND SUCCESS RAIN
+        function acceptProposal() {
+            document.getElementById('proposal-scene').style.display = 'none';
+            document.getElementById('success-page').style.display = 'flex';
+            
+            // Initial Confetti
+            confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+
+            // NONSTOP RAIN
+            setInterval(() => {
+                const e = document.createElement('div');
+                e.className = 'emoji-rain';
+                e.innerHTML = ['❤️', '💖', '🌹', '✨', '🎈', '🧸', '😍'][Math.floor(Math.random() * 7)];
+                e.style.left = Math.random() * 100 + 'vw';
+                e.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                e.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(e);
+                setTimeout(() => e.remove(), 4000);
+            }, 100);
+        }
+
+        // Global Background Floating
+        setInterval(() => {
+            const h = document.createElement('div');
+            h.innerHTML = '❤️';
+            h.style.position = 'fixed';
+            h.style.bottom = '-10%';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.color = 'rgba(255, 77, 109, 0.3)';
+            h.style.fontSize = Math.random() * 20 + 10 + 'px';
+            h.style.transition = '5s linear';
+            h.style.zIndex = '1';
+            document.body.appendChild(h);
+            setTimeout(() => {
+                h.style.transform = 'translateY(-110vh)';
+                h.style.opacity = '0';
+                setTimeout(() => h.remove(), 5000);
+            }, 100);
+        }, 500);
+    </script>
+</body>
+</html>
